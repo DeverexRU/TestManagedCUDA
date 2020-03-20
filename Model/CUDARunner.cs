@@ -27,6 +27,10 @@ namespace TestManagedCUDA.Model
             int deviceCount = CudaContext.GetDeviceCount();
 
             s += $"deviceCount = {deviceCount}\n";
+            int devID = CudaContext.GetMaxGflopsDeviceId();
+            s += $"GetMaxGflopsDeviceId = {devID}\n";
+
+            return s;
 
             for (int deviceID = 0; deviceID < deviceCount; deviceID++)
             {
