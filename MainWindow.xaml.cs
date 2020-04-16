@@ -37,9 +37,9 @@ namespace TestManagedCUDA
         {
             string s = "";
 
-            int ni = 3;
-            int nj = 4;
-            int nk = 5;
+            int ni = 12;
+            int nj = 23;
+            int nk = 31;
             int[,,] a = new int[ni, nj, nk];
             for (int i = 0; i < ni; i++)
             {
@@ -47,9 +47,32 @@ namespace TestManagedCUDA
                 {
                     for (int k = 0; k < nk; k++)
                     {
-                        int offset = i * nj * nk + j * nk + k;
+                        // вычисление смещения по индексам трехмерного массива
+                        int p = i * nj * nk + j * nk + k;
                         //int offset = i * ni * nj + j * nj + k;
-                        s+=$"[{i}, {j}, {k}] = [{offset}] \n";
+
+                        // вычисление индексов трехмерного массива по смещению
+
+                        // прямой метод
+                        //int _k = p % nk;
+                        //int _krest = p / nk;
+                        //int _j = _krest % nj;
+                        //int _i = _krest / nj;
+
+                        // оптимизированно с учетом ASM DIV
+                        int _krest = Math.DivRem(p, nk, out int _k);
+                        int _i = Math.DivRem(_krest, nj, out int _j);
+
+                        if ((i == _i) && (j == _j) && (k == _k))
+                        {
+                            s += $"[{i}, {j}, {k}] = [{p}] = [{_i}, {_j}, {_k}] - OK\n";
+                        }
+                        else
+                        {
+                            s += $"[{i}, {j}, {k}] = [{p}] = [{_i}, {_j}, {_k}] - !!!!!!!!!!! ERROR !!!!!!!!!!\n";
+                        }
+
+
                     }
                 }
             }

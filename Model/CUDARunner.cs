@@ -30,7 +30,7 @@ namespace TestManagedCUDA.Model
             int devID = CudaContext.GetMaxGflopsDeviceId();
             s += $"GetMaxGflopsDeviceId = {devID}\n";
 
-            return s;
+            //return s;
 
             for (int deviceID = 0; deviceID < deviceCount; deviceID++)
             {
@@ -39,33 +39,44 @@ namespace TestManagedCUDA.Model
                 s += $"DeviceName = {props.DeviceName}\n";
                 s += $"DriverVersion = {props.DriverVersion.ToString()}\n";
                 s += $"CUDA ComputeCapability = {props.ComputeCapability.ToString()}\n";
-                s += $"ClockRate = {(props.ClockRate/1000).ToString()} MHz\n";
-                s += $"TotalGlobalMemory = {(props.TotalGlobalMemory / 1000000).ToString()} Mb\n";
-                s += $"MultiProcessorCount = {props.MultiProcessorCount.ToString()}\n";
+
                 s += $"Integrated = {props.Integrated.ToString()}\n";
-                s += $"MemoryClockRate = {(props.MemoryClockRate/1000).ToString()} MHz\n";
+                s += $"MultiProcessorCount = {props.MultiProcessorCount.ToString()}\n";
+                s += $"ClockRate = {(props.ClockRate/1000).ToString()} MHz\n";
+
+                s += $"TotalGlobalMemory = {(props.TotalGlobalMemory / 1000000).ToString()} Mb\n";
+                s += $"MemoryClockRate = {(props.MemoryClockRate / 1000).ToString()} MHz\n";
                 s += $"GlobalMemoryBusWidth = {props.GlobalMemoryBusWidth.ToString()} bit\n";
+
+                s += $"maxGridSize[3] (MaxGridDim) = ({props.MaxGridDim.x}; {props.MaxGridDim.y}; {props.MaxGridDim.z}) \n";
+
+                s += $"maxThreadsPerBlock = {props.MaxThreadsPerBlock} \n";
+                s += $"maxThreadsDim[3] (MaxBlockDim) = ({props.MaxBlockDim.x}; {props.MaxBlockDim.y}; {props.MaxBlockDim.z}) \n";
+                s += $"MaxThreadsPerMultiProcessor = {props.MaxThreadsPerMultiProcessor} \n";
             }
+
+            return s;
+
             /*
-            + name[256] is an ASCII string identifying the device;
+            + name[256] = is an ASCII string identifying the device;
             uuid is a 16-byte unique identifier.
-            + totalGlobalMem is the total amount of global memory available on the device in bytes;
+            + totalGlobalMem = is the total amount of global memory available on the device in bytes;
             sharedMemPerBlock is the maximum amount of shared memory available to a thread block in bytes;
             regsPerBlock is the maximum number of 32-bit registers available to a thread block;
             warpSize is the warp size in threads;
             memPitch is the maximum pitch in bytes allowed by the memory copy functions that involve memory regions allocated through cudaMallocPitch();
-            maxThreadsPerBlock is the maximum number of threads per block;
-            maxThreadsDim[3] contains the maximum size of each dimension of a block;
-            maxGridSize[3] contains the maximum size of each dimension of a grid;
-            + clockRate is the clock frequency in kilohertz;
+            + maxThreadsPerBlock = is the maximum number of threads per block;
+            + maxThreadsDim[3] = MaxBlockDim = contains the maximum size of each dimension of a block;
+            + maxGridSize[3] = MaxGridDim = contains the maximum size of each dimension of a grid;
+            + clockRate = is the clock frequency in kilohertz;
             totalConstMem is the total amount of constant memory available on the device in bytes;
             major, minor are the major and minor revision numbers defining the device's compute capability;
             textureAlignment is the alignment requirement; texture base addresses that are aligned to textureAlignment bytes do not need an offset applied to texture fetches;
             texturePitchAlignment is the pitch alignment requirement for 2D texture references that are bound to pitched memory;
             deviceOverlap is 1 if the device can concurrently copy memory between host and device while executing a kernel, or 0 if not. Deprecated, use instead asyncEngineCount.
-            + multiProcessorCount is the number of multiprocessors on the device;
+            + multiProcessorCount = is the number of multiprocessors on the device;
             kernelExecTimeoutEnabled is 1 if there is a run time limit for kernels executed on the device, or 0 if not.
-            + integrated is 1 if the device is an integrated (motherboard) GPU and 0 if it is a discrete (card) component.
+            + integrated = is 1 if the device is an integrated (motherboard) GPU and 0 if it is a discrete (card) component.
             canMapHostMemory is 1 if the device can map host memory into the CUDA address space for use with cudaHostAlloc()/cudaHostGetDevicePointer(), or 0 if not;
             computeMode is the compute mode that the device is currently in. Available modes are as follows:
                 cudaComputeModeDefault: Default mode - Device is not restricted and multiple threads can use cudaSetDevice() with this device.
@@ -105,7 +116,7 @@ namespace TestManagedCUDA.Model
             + memoryClockRate is the peak memory clock frequency in kilohertz.
             + memoryBusWidth is the memory bus width in bits.
             l2CacheSize is L2 cache size in bytes.
-            maxThreadsPerMultiProcessor is the number of maximum resident threads per multiprocessor.
+            + maxThreadsPerMultiProcessor is the number of maximum resident threads per multiprocessor.
             streamPrioritiesSupported is 1 if the device supports stream priorities, or 0 if it is not supported.
             globalL1CacheSupported is 1 if the device supports caching of globals in L1 cache, or 0 if it is not supported.
             localL1CacheSupported is 1 if the device supports caching of locals in L1 cache, or 0 if it is not supported.
@@ -124,7 +135,26 @@ namespace TestManagedCUDA.Model
             pageableMemoryAccessUsesHostPageTables is 1 if the device accesses pageable memory via the host's page tables, and 0 otherwise.
             directManagedMemAccessFromHost is 1 if the host can directly access managed memory on the device without migration, and 0 otherwise.
             */
-            return s;
+
+            /*
+            deviceCount = 1
+            GetMaxGflopsDeviceId = 0
+            ----- DeviceID = 0 -----
+            DeviceName = GeForce GTX 1050 Ti
+            DriverVersion = 10.20
+            CUDA ComputeCapability = 6.1
+            Integrated = False
+            MultiProcessorCount = 6
+            ClockRate = 1392 MHz
+            TotalGlobalMemory = 4294 Mb
+            MemoryClockRate = 3504 MHz
+            GlobalMemoryBusWidth = 128 bit
+            maxGridSize[3] (MaxGridDim) = (2147483647; 65535; 65535) 
+            maxThreadsPerBlock = 1024 
+            maxThreadsDim[3] (MaxBlockDim) = (1024; 1024; 64) 
+            MaxThreadsPerMultiProcessor = 2048 
+            */
+
         }
     }
 }
